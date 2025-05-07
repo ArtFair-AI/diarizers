@@ -4,7 +4,9 @@ from pyannote.audio import Model
 from transformers import Trainer, TrainingArguments, HfArgumentParser
 
 from datasets import load_dataset, DatasetDict
-from diarizers import Preprocess, SegmentationModel,  DataCollator, Metrics
+from src.diarizers.data.preprocess import Preprocess
+from src.diarizers.models import SegmentationModel
+from src.diarizers.utils import DataCollator, Metrics
 from dataclasses import dataclass, field
 
 @dataclass
@@ -30,7 +32,7 @@ class DataTrainingArguments:
     )
 
     eval_split_name: str = field(
-        default="validation", metadata={"help": "The name of the training data set split to use (via the datasets library). Defaults to 'val'"}
+        default="val", metadata={"help": "The name of the training data set split to use (via the datasets library). Defaults to 'val'"}
     )
 
     split_on_subset: str = field(
@@ -58,14 +60,10 @@ class ModelArguments:
         metadata={"help": "Where do you want to store the pretrained models downloaded from huggingface.co"},
     )
 
-
-if __name__ == "__main__":
-
+def train_segmentation(data_args: DataTrainingArguments, model_args: ModelArguments, training_args: TrainingArguments):
+    """Train a segmentation model using the provided arguments."""
+    # Set CUDA device
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
-    parser = HfArgumentParser((DataTrainingArguments, ModelArguments, TrainingArguments))
-
-    data_args, model_args, training_args = parser.parse_args_into_dataclasses()
 
     # Load the Dataset:
     if data_args.dataset_config_name: 
@@ -85,7 +83,6 @@ if __name__ == "__main__":
 
     # Split in Train-Val-Test:
     if data_args.split_on_subset:
-        
         train_testvalid = dataset[str(data_args.split_on_subset)].train_test_split(test_size=0.2, seed=0)
         test_valid = train_testvalid['test'].train_test_split(test_size=0.5, seed=0)
 
@@ -164,3 +161,8 @@ if __name__ == "__main__":
         trainer.push_to_hub(**kwargs)
     else:
         trainer.create_model_card(**kwargs)
+
+if __name__ == "__main__":
+    parser = HfArgumentParser((DataTrainingArguments, ModelArguments, TrainingArguments))
+    data_args, model_args, training_args = parser.parse_args_into_dataclasses()
+    train_segmentation(data_args, model_args, training_args)

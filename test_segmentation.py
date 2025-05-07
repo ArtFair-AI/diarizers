@@ -2,7 +2,9 @@ import os
 
 from pyannote.audio import Model, Pipeline
 from datasets import load_dataset, DatasetDict
-from diarizers import SegmentationModel, Test, TestPipeline
+from src.diarizers.models import SegmentationModel
+
+from src.diarizers import Test, TestPipeline
 from dataclasses import dataclass, field
 from transformers import HfArgumentParser
 from typing import Optional
