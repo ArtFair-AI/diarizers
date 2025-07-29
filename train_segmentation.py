@@ -32,12 +32,12 @@ class DataTrainingArguments:
     )
 
     eval_split_name: str = field(
-        default="val", metadata={"help": "The name of the training data set split to use (via the datasets library). Defaults to 'val'"}
+        default="validation", metadata={"help": "The name of the training data set split to use (via the datasets library). Defaults to 'validation'"}
     )
 
     split_on_subset: str = field(
         default=None,
-        metadata={"help": "Automatically splits the dataset into train-val-set on a specified subset. Defaults to 'None'"},
+        metadata={"help": "Automatically splits the dataset into train-validation-set on a specified subset. Defaults to 'None'"},
     )
 
     preprocessing_num_workers: Optional[int] = field(
@@ -81,7 +81,7 @@ def train_segmentation(data_args: DataTrainingArguments, model_args: ModelArgume
     train_split_name = data_args.train_split_name
     val_split_name = data_args.eval_split_name
 
-    # Split in Train-Val-Test:
+    # Split in Train-Validation-Test:
     if data_args.split_on_subset:
         train_testvalid = dataset[str(data_args.split_on_subset)].train_test_split(test_size=0.2, seed=0)
         test_valid = train_testvalid['test'].train_test_split(test_size=0.5, seed=0)

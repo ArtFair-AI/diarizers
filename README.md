@@ -83,10 +83,10 @@ To train on a different dataset, simply change the arguments:
 - `dataset_name`: Specify a dataset from the Hub on which to fine-tune your model.  
 - `dataset_config_name`: If the dataset contains multiple language subsets, select the language ID of the subset you want to train on.
 
-If the data set doesn't contain a train and a validation split, you can automatically split it into train-val-test 
+If the data set doesn't contain a train and a validation split, you can automatically split it into train-validation-test 
 (90-10-10) by setting the argument: 
 
-- `split_on_subset`: Specify the subset of the dataset you want to split into train-val-set.
+- `split_on_subset`: Specify the subset of the dataset you want to split into train-validation-set.
 
 > [!IMPORTANT]
 > For now, this library can only be used to fine-tune the [segmentation model](https://huggingface.co/pyannote/segmentation-3.0) from the [speaker diarization pipeline](https://huggingface.co/pyannote/speaker-diarization-3.1). 

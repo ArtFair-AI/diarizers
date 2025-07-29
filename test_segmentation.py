@@ -33,7 +33,7 @@ class DataTrainingArguments:
 
     split_on_subset: str = field(
         default=None,
-        metadata={"help": "Automatically splits the dataset into train-val-set on a specified subset. Defaults to 'None'"},
+        metadata={"help": "Automatically splits the dataset into train-validation-set on a specified subset. Defaults to 'None'"},
     )
 
     preprocessing_num_workers: Optional[int] = field(
@@ -90,7 +90,7 @@ if __name__ == "__main__":
                  
     test_split_name = data_args.test_split_name
 
-    # Split in Train-Val-Test and use Test Subset:
+    # Split in Train-Validation-Test and use Test Subset:
     if data_args.split_on_subset:
         
         train_testvalid = dataset[str(data_args.split_on_subset)].train_test_split(test_size=0.2, seed=0)
